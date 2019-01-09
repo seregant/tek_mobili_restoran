@@ -18,6 +18,27 @@
 		if ($result == 0) {
 			$res['error'] = false;
 			$res['message'] = 'Order added successfully!';
+			$res['data']['makanan'] = '';
+			$res['data']['jml_makanan'] = '';
+			$res['data']['minuman'] = '';
+			$res['data']['jml_minuman'] = '';
+
+			foreach ($makanan as $data) {
+				$getMakanan = $opr->getMenuDetail('makanan',$data['id']);
+				$dataMakanan = $getMakanan->fetch_assoc();
+
+				$res['data']['makanan'] .= $dataMakanan['makanan_nama'].'_';
+				$res['data']['jml_makanan'] .= $data['jumlah'].'_';
+			}
+
+			foreach ($minuman as $data) {
+				$getMinuman = $opr->getMenuDetail('minuman',$data['id']);
+				$dataMinuman = $getMinuman->fetch_assoc();
+
+				$res['data']['minuman'] .= $dataMakanan['makanan_nama'].'_';
+				$res['data']['jml_minuman'] .= $data['jumlah'].'_';
+			}
+
 		} elseif ($result == 1) {
 			$res['error'] = true;
 			$res['message'] = 'Adding order : failure!';

@@ -57,20 +57,19 @@ class db_operation {
 		$dtMinuman = $minuman->get_result();
 		$minuman->close();
 
-		$arr = [];
+		$arr['makanan'] = "";
+		$arr['jml_makanan'] = "";
+		$arr['minuman'] = "";
+		$arr['jml_minuman'] = "";
 
-		$index = 0;
 		while ($row = $dtMakanan->fetch_assoc()) {
-			$arrayObject = (array('makanan_nama' => $row['makanan_nama'], 'makanan_jumlah' => $row['jumlah']));
-			$arr['makanan'][$index] = $arrayObject;
-			$index++;
+			$arr['makanan'] .= $row['makanan_nama']."_";
+			$arr['jml_makanan'] .= $row['jumlah']."_";
 		}
 
-		$index = 0;
 		while ($row = $dtMinuman->fetch_assoc()) {
-			$arrayObject = (array('minuman_nama' => $row['minuman_nama'], 'minuman_jumlah' => $row['jumlah']));
-			$arr['minuman'][$index] = $arrayObject;
-			$index++;
+			$arr['minuman'] .= $row['minuman_nama']."_";
+			$arr['jml_minuman'] .= $row['jumlah']."_";
 		}
 
 		return json_encode($arr);  
@@ -202,6 +201,16 @@ class db_operation {
 		} else {
 			return 1; //it means failure
 		}
+	}
+
+	public function getMenuDetail($type, $id){
+		$sql = "SELECT * FROM res_".$type." WHERE ".$type."_id = ?";
+		$data = $this->con->prepare($sql);
+		$data->bind_param("s",$id);
+		$data->execute();
+		$result = $data->get_result();
+		$data->close();
+		return $result;
 	}
 }
 
